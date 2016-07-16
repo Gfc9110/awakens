@@ -21,7 +21,143 @@ public class PlayerObjectInteraction : MonoBehaviour {
 
 	string stackType = "";
 
-	void FixedUpdate () {/*
+	void FixedUpdate () {
+
+		bool leftDown = Input.GetMouseButtonDown (0) || Input.GetKeyDown (KeyCode.JoystickButton4);
+
+		bool rightDown = Input.GetMouseButtonDown (1) || Input.GetKeyDown (KeyCode.JoystickButton5);
+
+		if (leftDown || rightDown) {
+
+			int clickSide = leftDown ? 0 : 1;
+
+			int otherSide = leftDown ? 1 : 0;
+
+			bool thisHandOccupied = areObjects [clickSide];
+
+			if (thisHandOccupied) {
+
+				ObjectProperties thisObjProperties = objects [clickSide].GetComponent<ObjectProperties> ();
+
+				bool isThisObjStackable = thisObjProperties.stackable;
+
+				if (isThisObjStackable) {
+
+					RaycastHit hit = new RaycastHit ();
+
+					bool objClicked = Physics.Raycast (cam.transform.position, cam.transform.forward, out hit);
+
+					bool isObjUsable = hit.collider.gameObject.tag == usableTag;
+
+					bool otherHandFree = areObjects [otherSide];
+
+					if (objClicked && isObjUsable) {
+
+						if (otherHandFree) {
+
+							bool notReachedMaxStackValue = stackQty < thisObjProperties.maxStack;
+
+							if (notReachedMaxStackValue) {
+
+								ObjectProperties clickedObjProperties = hit.collider.gameObject.GetComponent<ObjectProperties> ();
+
+								bool sameObjType = thisObjProperties.getName () == clickedObjProperties.getName ();
+
+								if (sameObjType) {
+
+									//TODO Add to stack
+
+								} else {
+
+									//TODO Error Message Not Same Object
+
+								}
+
+							} else {
+
+								//TODO Error Message Max Stack Reached
+
+							}
+
+						} else {
+
+							//TODO Error Message Other Hand Occupied
+
+						}
+
+					} else {
+
+						bool moreThanOneInStack = stackQty > 1;
+
+						if (moreThanOneInStack) {
+
+							if (otherHandFree) {
+
+								//TODO Hit or Launch one from stack
+
+							} else {
+
+								//TODO Error Message Other Hand Occupied
+
+							}
+
+						}
+
+					}
+
+				} else {
+
+					//TODO Hit or Launch
+
+				}
+
+			} else {
+
+				RaycastHit hit = new RaycastHit ();
+
+				bool objClicked = Physics.Raycast (cam.transform.position, cam.transform.forward, out hit);
+
+				bool isObjUsable = hit.collider.gameObject.tag == usableTag;
+
+				if (objClicked && isObjUsable) {
+
+					ObjectProperties clickedObjProperties = hit.collider.gameObject.GetComponent<ObjectProperties> ();
+
+					if (clickedObjProperties.isTwoHands) {
+
+						bool otherHandFree = areObjects [otherSide];
+
+						if (otherHandFree) {
+
+							//TODO Pick Object WIth Two Hands
+
+						} else {
+
+							//TODO Error Message Too Heavy To Pick With One Hand
+
+						}
+
+					} else {
+
+						//TODO Pick Object
+
+					}
+
+				} else {
+
+					//TODO Hit With Hands
+
+				}
+
+			}
+
+		}
+
+
+
+
+
+		/*
 
 		bool leftDown = Input.GetMouseButtonDown (0) || Input.GetKeyDown (KeyCode.JoystickButton4);
 
@@ -89,7 +225,7 @@ public class PlayerObjectInteraction : MonoBehaviour {
 
 
 
-		RaycastHit hit = new RaycastHit ();
+		/*RaycastHit hit = new RaycastHit ();
 
 		for (int i = 0; i < 2; i++) {
 

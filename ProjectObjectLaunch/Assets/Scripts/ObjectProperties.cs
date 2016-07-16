@@ -7,6 +7,8 @@ public class ObjectProperties : MonoBehaviour {
 
 	public bool stackable = false;
 
+	public bool isTwoHands = false;
+
 	public int maxStack = 0;
 
 	public Vector3 handRotation = new Vector3 ();
