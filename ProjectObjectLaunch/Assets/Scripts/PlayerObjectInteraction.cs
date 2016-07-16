@@ -17,10 +17,6 @@ public class PlayerObjectInteraction : MonoBehaviour {
 
 	int stackQty = 0;
 
-	bool stacking = false;
-
-	string stackType = "";
-
 	void FixedUpdate () {
 
 		bool leftDown = Input.GetMouseButtonDown (0) || Input.GetKeyDown (KeyCode.JoystickButton4);
@@ -107,7 +103,7 @@ public class PlayerObjectInteraction : MonoBehaviour {
 
 				} else {
 
-					//TODO Hit or Launch
+					UseObject (clickSide);
 
 				}
 
@@ -139,7 +135,7 @@ public class PlayerObjectInteraction : MonoBehaviour {
 
 					} else {
 
-						//TODO Pick Object
+						PickObjectOneHand (clickSide, hit.collider.gameObject);
 
 					}
 
@@ -482,6 +478,78 @@ public class PlayerObjectInteraction : MonoBehaviour {
 
 		}*/
 	
+	}
+
+	void PickObjectOneHand (int side, GameObject obj){
+
+		GameObject parentObject = (side == 0) ? leftObjectPosition : rightObjectPosition;
+
+		areObjects[side] = true;
+
+		objects[side] = obj;
+
+		Rigidbody rb = obj.GetComponent<Rigidbody> ();
+
+		rb.isKinematic = true;
+
+		rb.detectCollisions = false;
+
+		obj.transform.SetParent (parentObject.transform);
+
+		obj.transform.localPosition = new Vector3 (0, 0, 0);
+
+		obj.transform.localRotation = obj.GetComponent<ObjectProperties>().getHandRotation ();
+
+	}
+
+	void UseObject (int side){
+
+		Debug.Log ("Use Object");
+
+		bool isTwoHands = objects [side].GetComponent<ObjectProperties> ().isTwoHands;
+
+		bool launch = Input.GetButton ("Launch Trigger");
+
+		if (isTwoHands) {
+
+
+
+		} else {
+
+			if (launch) {
+
+				objects [side].transform.parent = null;
+
+				areObjects[side] = false;
+
+				Rigidbody rb = objects [side].GetComponent<Rigidbody> ();
+
+				rb.isKinematic = false;
+
+				rb.detectCollisions = true;
+
+				RaycastHit hit = new RaycastHit ();
+
+				if (Physics.Raycast (new Ray (cam.transform.position, cam.transform.forward), out hit)) {
+
+					rb.AddForce ((hit.point-objects [side].transform.position).normalized * 1500);
+
+				} else {
+
+					rb.AddForce (cam.transform.forward * 2000);
+				
+				}
+
+				rb.AddForce (GetComponent<PlayerMovement>().movement*20,ForceMode.VelocityChange);
+
+			} else {
+
+
+
+			}
+
+		}
+
 	}
 
 }
