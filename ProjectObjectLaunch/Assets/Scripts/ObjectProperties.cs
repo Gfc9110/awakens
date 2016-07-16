@@ -13,6 +13,8 @@ public class ObjectProperties : MonoBehaviour {
 
 	public Vector3 handRotation = new Vector3 ();
 
+	public Vector3 stackedOverPosition = new Vector3 ();
+
 	Quaternion qHandRotation = new Quaternion ();
 
 	Rigidbody rb;
@@ -26,6 +28,8 @@ public class ObjectProperties : MonoBehaviour {
 		rb = GetComponent<Rigidbody> ();
 
 		mass = rb.mass;
+
+		maxStack--;
 
 	}
 
