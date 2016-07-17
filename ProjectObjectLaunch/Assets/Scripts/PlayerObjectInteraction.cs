@@ -15,7 +15,7 @@ public class PlayerObjectInteraction : MonoBehaviour {
 
 	GameObject[] objects = {null,null};
 
-	GameObject[] stackedObjects = new GameObject[10];
+	GameObject[] stackedObjects = new GameObject[100];
 
 	bool[] areObjects = {false,false};
 
